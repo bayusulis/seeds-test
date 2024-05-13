@@ -7,10 +7,10 @@ metadata:
 spec:
   tls:
     - hosts:
-        - example.com
+        - belumdisis
       secretName: tls-secret
   rules:
-    - host: example.com
+    - host: belumdisi
       http:
         paths:
           - pathType: Prefix
