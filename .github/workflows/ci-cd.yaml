@@ -1,24 +1,16 @@
-<<<<<<< HEAD
+
 name: CI/CD Pipeline
-=======
-name: CI/CD
->>>>>>> 40095a3dcbd8c300322648c19df02e0101ca02ce
 
 on:
   push:
     branches:
-<<<<<<< HEAD
       - main
-=======
-      - master
->>>>>>> 40095a3dcbd8c300322648c19df02e0101ca02ce
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-<<<<<<< HEAD
     - name: Checkout repository
       uses: actions/checkout@v2
 
@@ -42,47 +34,3 @@ jobs:
       run: |
         kubectl apply -f service.yaml
         kubectl set image deployment/seeds-test-deployment seeds-test=us-central1-docker.pkg.dev/$GCP_PROJECT_ID/seeds-test:${{ github.sha }}
-=======
-    - name: Checkout Repository
-      uses: actions/checkout@v2
-      
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v1
-      
-    - name: Build Docker image
-      run: |
-        docker build -t gcr.io/your-project-id/test-seeds:latest .
-        docker push gcr.io/your-project-id/test-seeds:latest
-      env:
-        GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
-        PROJECT_ID: your-project-id
-
-    - name: Deploy to Kubernetes
-      uses: google-github-actions/deploy-to-gke@v2
-      with:
-        credentials: ${{ secrets.GKE_SA_KEY }}
-        project_id: your-project-id
-        cluster: your-cluster-name
-        location: your-cluster-location
-        manifest: |
-          apiVersion: apps/v1
-          kind: Deployment
-          metadata:
-            name: test-seeds
-          spec:
-            replicas: 3
-            selector:
-              matchLabels:
-                app: test-seeds
-            template:
-              metadata:
-                labels:
-                  app: test-seeds
-              spec:
-                containers:
-                - name: test-seeds
-                  image: gcr.io/your-project-id/test-seeds:latest
-                  ports:
-                  - containerPort: 8080
-        container_image_url: gcr.io/your-project-id/test-seeds:latest
->>>>>>> 40095a3dcbd8c300322648c19df02e0101ca02ce
