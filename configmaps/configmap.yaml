@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: seeds-test-config
+data:
+  environment_dev: Development
+  environment_prod: Production

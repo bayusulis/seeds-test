@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: seeds-test-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: seeds-test
+  template:
+    metadata:
+      labels:
+        app: seeds-test
+    spec:
+      containers:
+      - name: seeds-test
+        image: gcr.io/your-project-id/seeds-test:1.0
+        ports:
+        - containerPort: 80
+        env:
+        - name: ENVIRONMENT
+          valueFrom:
+            configMapKeyRef:
+              name: seeds-test-config
+              key: environment_dev 

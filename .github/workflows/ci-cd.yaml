@@ -1,0 +1,35 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Google Cloud SDK
+      uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+      with:
+        project_id: ${{ secrets.GCP_PROJECT_ID }}
+        service_account_key: ${{ secrets.GCP_SA_KEY }}
+        export_default_credentials: true
+
+    - name: Configure Docker and Artifact Registry
+      run: |
+        gcloud auth configure-docker us-central1-docker.pkg.dev --quiet
+
+    - name: Build and Push Docker image
+      run: |
+        docker build -t us-central1-docker.pkg.dev/$GCP_PROJECT_ID/seeds-test:${{ github.sha }} .
+        docker push us-central1-docker.pkg.dev/$GCP_PROJECT_ID/seeds-test:${{ github.sha }}
+
+    - name: Deploy to GKE
+      run: |
+        kubectl apply -f service.yaml
+        kubectl set image deployment/seeds-test-deployment seeds-test=us-central1-docker.pkg.dev/$GCP_PROJECT_ID/seeds-test:${{ github.sha }}
